@@ -2,6 +2,11 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+A wepback loader which allows developers to write `ghosts`, or substitute versions of their code which are inserted at build time.
+
+Try using ghostly for:
+- A/B/C... testing
+- Running a different set of code given a certain context
 
 ## Installation and Use With Webpack
 ```sh
@@ -23,12 +28,6 @@ module.exports = {
 
 }
 ```
-
-A wepback loader which allows developers to write `ghosts`, or substitute versions of their code.
-
-Try using ghostly for:
-- A/B/C... testing
-- Running a different set of code given a certain context
 
 ## Usage
 
@@ -58,8 +57,10 @@ When `'main'` is returned, the original or primary function will be used.
 When the function and tag name are returned, the corresponding ghost will be used.
 
 ```js
-global.determineGhost = () => {
-  return (Math.random() > .5) ? 'main' : 'myGreeting$spanish'
+global.determineGhost = (name) => {
+  if (name === 'myGreeting') {
+    return (Math.random() > .5) ? 'main' : 'myGreeting$spanish'
+  }
 }
 ```
 
