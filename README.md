@@ -28,6 +28,16 @@ function myGreeting$spanish() {
 }
 ```
 
+The developer should attach a function called `determineGhost` on the global scope. This function will be called with the name of the ghost and any configuration that the ghost function was created with.
+
+`determineGhost` should return either `'main'` or the function name with the tag of the ghost that should be run.
+
+```js
+global.determineGhost = (funcName) => {
+  return (Math.random() > .5) ? 'main' : funcName + '$spanish'
+}
+```
+
 ### Inline Configuration
 
 Ghosts can be configured to run probalistically using inline comments:
@@ -35,8 +45,17 @@ Ghosts can be configured to run probalistically using inline comments:
 `some-file.ghost.js`
 ```js
 // 0.5
-function myGhost() {
+function myFunction$example() {
     return "I will be used half the time!"
+}
+```
+In `determineGhost`.
+```js
+global.determineGhost = (functionName, config) => {
+  assert(functionName === 'myFunction')
+  assert(config.myFunction$example === 0.5)
+  
+  return (Math.random() > config.myFunction$example) ? 'myFunction$example' : 'main'
 }
 ```
 
