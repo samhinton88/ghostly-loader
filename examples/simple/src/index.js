@@ -1,8 +1,6 @@
-// realistically this would be configured elsewhere
+// always run spanish version
 global.determineGhost = (id) => {
-  
-
-  return (Math.random() > .5) ? 'main' : id
+  return funcName + '$spanish'
 }
 
 const foo = require('./foo')

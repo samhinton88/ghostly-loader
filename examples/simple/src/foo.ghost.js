@@ -1,4 +1,4 @@
 // 0.2
-function foo() {
+function foo$spanish() {
   return 'bar'
 }
