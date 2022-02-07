@@ -2,6 +2,28 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+
+## Installation and Use With Webpack
+```sh
+npm i --save-dev ghostly-loader
+or 
+yarn add -D ghostly-loader
+```
+
+In `webpack.config.js`
+```js
+module.exports = {
+  // ...
+  module: {
+    rules: [
+      // ...
+      { test: /\.js$/, use: 'ghostly-loader' },
+    ],
+  }
+
+}
+```
+
 A wepback loader which allows developers to write `ghosts`, or substitute versions of their code.
 
 Try using ghostly for:
