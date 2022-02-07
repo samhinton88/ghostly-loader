@@ -27,7 +27,7 @@ module.exports = {
 A wepback loader which allows developers to write `ghosts`, or substitute versions of their code.
 
 Try using ghostly for:
-- A/B/C... testting
+- A/B/C... testing
 - Running a different set of code given a certain context
 
 ## Usage
