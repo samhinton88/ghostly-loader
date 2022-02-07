@@ -27,10 +27,13 @@ function myGreeting$spanish() {
     return "Hola!"
 }
 ```
-
-The developer should attach a function called `determineGhost` on the global scope. This function will be called with the name of the ghost and any configuration that the ghost function was created with.
+A function called `determineGhost` should be put on the global scope. This function will be called with the name of the ghost and any configuration that the ghost function was created with.
 
 `determineGhost` should return either `'main'` or the function name with the tag of the ghost that should be run.
+
+When `'main'` is returned, the original or primary function will be used.
+
+When the function and tag name are returned, the corresponding ghost will be used.
 
 ```js
 global.determineGhost = (funcName) => {
