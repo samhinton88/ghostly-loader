@@ -36,8 +36,35 @@ When `'main'` is returned, the original or primary function will be used.
 When the function and tag name are returned, the corresponding ghost will be used.
 
 ```js
-global.determineGhost = (funcName) => {
-  return (Math.random() > .5) ? 'main' : funcName + '$spanish'
+global.determineGhost = () => {
+  return (Math.random() > .5) ? 'main' : 'myGreeting$spanish'
+}
+```
+
+### Multiple Ghosts
+
+A single function may have many ghosts, they simply have to start with the name of the original function:
+
+`src/index.ghost.js`
+```js
+// src/index.ghost.js
+function myGreeting$spanish() {
+    return "Hola!"
+}
+
+function myGreeting$german() {
+    return "Halo"
+}
+```
+`root`
+```js
+global.determineGhost = (functionName, config) => {
+  assert(functionName === 'myGreeting')
+  const ghostNames = Object.keys(config) // ['myGreeting$spanish', 'myGreeting$german']
+
+  const randomIndex = Math.floor(Math.random() * ghostNames.length)
+
+  return ghostNames[randomIndex]
 }
 ```
 
@@ -52,7 +79,7 @@ function myFunction$example() {
     return "I will be used half the time!"
 }
 ```
-In `determineGhost`.
+In `determineGhost`:
 ```js
 global.determineGhost = (functionName, config) => {
   assert(functionName === 'myFunction')
@@ -68,4 +95,3 @@ function myFunction$optionalTagName () {
     // this code will run in place of the primary code.
 }
 ```
-

@@ -106,7 +106,7 @@ const ghostwrite = (source, object) => {
           ghosts,
           mainImplementation: p.node,
           mainImplementationIdentifier: t.identifier(sourceFunctionName),
-          ghostName: t.stringLiteral("__ghost__" + sourceFunctionName),
+          ghostName: t.stringLiteral(sourceFunctionName),
         })
       );
     },
