@@ -11,10 +11,14 @@ module.exports = {
       {
         test: /\.js/,
         use: [
-          { loader: path.resolve('./loader.js') }
+          { loader: path.resolve('../../index.js') }
         ]
       }
     ]
   },
-  optimization: {     emitOnErrors: true }
+  optimization: { 
+    emitOnErrors: true,
+    minimize: false
+  },
+  
 };
