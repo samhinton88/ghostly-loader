@@ -6,7 +6,7 @@ A wepback loader which allows developers to write `ghosts`, or substitute versio
 
 Try using ghostly for:
 - A/B/C... testing
-- Running a different set of code given a certain context
+- Running a different set of code given a certain context (e.g. locale, localStorage)
 
 ## Installation and Use With Webpack
 ```sh
@@ -39,7 +39,7 @@ function myGreeting() {
     return "Hello!"
 }
 ```
-Then, in a separate file, write your ghost with the `.ghost.js` file extension.
+Then, in a separate file, write your ghost in a file in the same directory named `[target_file_name].ghost.js`:
 
 `src/index.ghost.js`
 ```js
