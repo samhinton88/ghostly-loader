@@ -43,7 +43,6 @@ Then, in a separate file, write your ghost in a file in the same directory named
 
 `src/index.ghost.js`
 ```js
-// src/index.ghost.js
 function myGreeting$spanish() {
     return "Hola!"
 }
@@ -70,13 +69,12 @@ A single function may have many ghosts, they simply have to start with the name 
 
 `src/index.ghost.js`
 ```js
-// src/index.ghost.js
 function myGreeting$spanish() {
     return "Hola!"
 }
 
 function myGreeting$german() {
-    return "Halo"
+    return "Hallo"
 }
 ```
 `root`
