@@ -9,11 +9,17 @@ Try using ghostly for:
 - Running a different set of code given a certain context (e.g. locale, localStorage)
 
 ## Installation and Use With Webpack
+The loader is built to work in tandem with the `ghostly-controller`:
+
 ```sh
 npm i --save-dev ghostly-loader
+npm i --save ghostly-controller
 or 
 yarn add -D ghostly-loader
+yarn add ghostly-controller
 ```
+
+> NB: `ghostly-controller` is not required, see below.
 
 In `webpack.config.js`
 ```js
@@ -35,6 +41,8 @@ This version of the ghostly loader is a POC and so functionality is limited func
 
 `src/index.js`
 ```js
+require('ghostly-controller')();
+
 function myGreeting() {
     return "Hello!"
 }
@@ -47,21 +55,19 @@ function myGreeting$spanish() {
     return "Hola!"
 }
 ```
-A function called `determineGhost` should be put on the global scope. This function will be called with the name of the ghost and any configuration that the ghost function was created with.
+`ghostly-controller` places a function called `determineGhost` on the global scope. This function will be called with the name of the ghost and any configuration that the ghost function was created with.
 
-`determineGhost` should return either `'main'` or the function name with the tag of the ghost that should be run.
+You can choose not to use `ghostly-controller` and define your own implementation in its place.
+
+`determineGhost` will return either `'main'` or the tag of the ghost that should be run in its place.
 
 When `'main'` is returned, the original or primary function will be used.
 
 When the function and tag name are returned, the corresponding ghost will be used.
 
-```js
-global.determineGhost = (name) => {
-  if (name === 'myGreeting') {
-    return (Math.random() > .5) ? 'main' : 'myGreeting$spanish'
-  }
-}
-```
+By default, `ghostly-controller` defines a `determineGhost` function which uses `localStorage` to persist information about which ghosts should run.
+
+Developers may open their dev tools, navigate to `localStorage` and override that information.
 
 ### Multiple Ghosts
 

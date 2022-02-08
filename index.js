@@ -1,14 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const ghostwrite = require('./ghostwrite')
-/**
- *
- * @param {string|Buffer} content Content of the resource file
- * @param {object} [map] SourceMap data consumable by https://github.com/mozilla/source-map
- * @param {any} [meta] Meta data, could be anything
- */
- function webpackLoader(content, map, meta) {
-  // code of your webpack loader
+
+ function ghostlyLoader(content, map, meta) {
   const callback = this.async();
 
   const fileName = path.basename(this.resourcePath, path.extname(this.resourcePath));
@@ -26,8 +20,6 @@ const ghostwrite = require('./ghostwrite')
 
     callback(null, content, map, meta) ;
   }
-  
-  // console.log(this.resourcePath)
 }
 
-module.exports = webpackLoader
+module.exports = ghostlyLoader;

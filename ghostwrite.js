@@ -1,16 +1,15 @@
-const fs = require("fs");
 const parser = require("@babel/parser");
 const traverse = require("@babel/traverse").default;
 const generator = require("@babel/generator").default;
 const template = require("@babel/template").default;
 const t = require("@babel/types");
-const { promisify } = require("util");
 
 
 const getFunctions = (memo, comments) => ({
   Function(p) {
 
     if (!p.node.id) return memo.push({ name: "_" });
+
     const ghostName = p.node.id.name;
     const comment = comments.find((c) => c.loc.end.line === (p.node.loc.start.line - 1))
     console.log({ comment })
@@ -37,17 +36,19 @@ const ghostOrchestrateTemplate = ({ ghosts, ...rest }) => {
         ...acc,
         [`${name}`]: implementation,
         [`${name}_identifier`]: t.identifier(`${name}`),
-
-        [`${name}_name`]: t.stringLiteral(`${name}`),
       };
     }, {}),
   };
 
-  const orchestrationTemplateString = `const  %%mainImplementationIdentifier%% = (...args) => {
-  const determine = global.determineGhost(%%ghostName%%, {
-
-    ${ghosts.map((ghost) => `${ghost.name}: ${ghost.comment ? ghost.comment.value : 'undefined'},`).join('\n')}
-  });
+  const orchestrationTemplateString = `
+  
+  global.ghostly.local.register(%%ghostName%%, 
+    [${ghosts.map(g => g.name ? `"${g.tag}",` : null).filter(Boolean)}]  
+  );
+  const  %%mainImplementationIdentifier%% = (...args) => {
+    const determine = global.ghostly.determineGhost(%%ghostName%%, {
+      ${ghosts.map((ghost) => `${ghost.name}: ${ghost.comment ? ghost.comment.value : 'undefined'},`).join('\n')}
+    }) || 'main';
   
     %%mainImplementation%%
   
@@ -58,23 +59,19 @@ const ghostOrchestrateTemplate = ({ ghosts, ...rest }) => {
       ${ghosts
         .map(
           ({ tag, name }) =>
-            `[%%${name}_name%%]: %%${name}_identifier%%`
+            `${tag}: %%${name}_identifier%%`
         )
         .join(",\n")}
     })[determine](...args)
   }`;
 
-  console.log(orchestrationTemplateString)
-  console.log(Object.keys(args))
-
   return template(orchestrationTemplateString)(args);
 };
 
-const ghostwrite = (source, object) => {
-  const ghostAst = parser.parse(source);
+const ghostwrite = (ghostSource, object) => {
+  const ghostAst = parser.parse(ghostSource);
+
   const objectAst = parser.parse(object);
-
-
 
   const ghostFunctions = [];
 
@@ -101,7 +98,7 @@ const ghostwrite = (source, object) => {
 
       memo[sourceFunctionName] = true;
 
-      p.replaceWith(
+      p.replaceWithMultiple(
         ghostOrchestrateTemplate({
           ghosts,
           mainImplementation: p.node,
