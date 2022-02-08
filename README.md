@@ -91,13 +91,15 @@ global.determineGhost = (functionName, config) => {
 
 ### Inline Configuration
 
-Ghosts can be configured to run probalistically using inline comments:
+Ghosts can be configured to run probalistically using inline comments.
+
+Any text placed in a comment directly above your ghost will be sent to `determineGhost` when the function is called:
 
 `some-file.ghost.js`
 ```js
 // 0.5
 function myFunction$example() {
-    return "I will be used half the time!"
+    return "I should be used half (0.5x) the time!"
 }
 ```
 In `determineGhost`:
@@ -105,8 +107,12 @@ In `determineGhost`:
 global.determineGhost = (functionName, config) => {
   assert(functionName === 'myFunction')
   assert(config.myFunction$example === 0.5)
+
+  if (functionName === 'myFunction') {
+    return (Math.random() > config.myFunction$example) ? 'myFunction$example' : 'main'
+  }
   
-  return (Math.random() > config.myFunction$example) ? 'myFunction$example' : 'main'
+  return 'main';
 }
 ```
 
