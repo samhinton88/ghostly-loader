@@ -12,7 +12,7 @@ const getFunctions = (memo, comments) => ({
 
     const ghostName = p.node.id.name;
     const comment = comments.find((c) => c.loc.end.line === (p.node.loc.start.line - 1))
-    console.log({ comment })
+
     const tag = ghostName.split("$")[1];
 
     memo.push({
@@ -68,10 +68,12 @@ const ghostOrchestrateTemplate = ({ ghosts, ...rest }) => {
   return template(orchestrationTemplateString)(args);
 };
 
-const ghostwrite = (ghostSource, object) => {
-  const ghostAst = parser.parse(ghostSource);
+const parseConfig = { allowImportExportEverywhere: true, plugins: ['jsx', 'typescript']}
 
-  const objectAst = parser.parse(object);
+const ghostwrite = (ghostSource, object) => {
+  const ghostAst = parser.parse(ghostSource, parseConfig);
+
+  const objectAst = parser.parse(object, parseConfig);
 
   const ghostFunctions = [];
 
